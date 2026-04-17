@@ -8,7 +8,7 @@ Este repositorio contiene el desarrollo de la aplicación **"Sala de Juegos"**, 
 
 La aplicación se ha desarrollado siguiendo los lineamientos técnicos y las restricciones de diseño establecidas en el programa de la materia:
 
-* **Frontend:** Desarrollado con el framework **Angular**.
+* **Frontend:** Desarrollado con el framework **Angular** | **/client**
 * **Servidor y Persistencia:** Integración con **Supabase** para la gestión de bases de datos y servicios de autenticación.
 * **Interfaz de Usuario (UI):**
     * Uso de librerías de estilos para un diseño uniforme.
