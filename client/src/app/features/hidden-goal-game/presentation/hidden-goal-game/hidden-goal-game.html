@@ -1,0 +1,154 @@
+<div class="min-h-screen bg-black text-white overflow-hidden relative">
+  <!-- Background subtle gradient -->
+  <div class="absolute inset-0 bg-linear-to-b from-gray-900 via-black to-gray-950 opacity-50"></div>
+  
+  <!-- Main content -->
+  <div class="relative z-10">
+    <app-nav-bar></app-nav-bar>
+
+    <!-- Game Section -->
+    <section class="min-h-screen flex items-center justify-center px-6 pt-20">
+      <div class="max-w-6xl w-full">
+        <!-- Game Title -->
+        <div class="text-center mb-8">
+          <h1 class="text-4xl md:text-6xl font-thin mb-4 tracking-wider text-gray-200">
+            HIDDEN GOAL
+          </h1>
+          <p class="text-gray-500 text-lg tracking-wide">
+            Encuentra la pelota y luego el arco. ¡Siente el boost!
+          </p>
+        </div>
+
+        <!-- Game Container -->
+        <div class="relative mx-auto" style="max-width: 900px;">
+          <!-- Boost Meter -->
+          <div class="absolute top-4 right-4 z-20 bg-black/80 backdrop-blur-sm border border-gray-700 rounded-lg p-3">
+            <div class="text-xs text-gray-400 mb-1 tracking-wider">BOOST</div>
+            <div class="w-32 h-3 bg-gray-800 rounded-full overflow-hidden">
+              <div 
+                class="h-full transition-all duration-300 ease-out"
+                [class]="boostColor"
+                [style.width.%]="boostPercentage">
+              </div>
+            </div>
+            <div class="text-xs text-gray-500 mt-1 text-right">{{ boostPercentage.toFixed(0) }}%</div>
+          </div>
+
+          <!-- Game Status -->
+          <div class="absolute top-4 left-4 z-20 bg-black/80 backdrop-blur-sm border border-gray-700 rounded-lg px-4 py-2">
+            <div class="text-sm tracking-wider">
+              @switch (gameState) {
+                @case ('BUSCANDO_PELOTA') {
+                  <span class="text-blue-400">BUSCANDO PELOTA</span>
+                }
+                @case ('BUSCANDO_ARCO') {
+                  <span class="text-orange-400">BUSCANDO ARCO</span>
+                }
+                @case ('GOL') {
+                  <span class="text-green-400 animate-pulse">¡GOAL!</span>
+                }
+              }
+            </div>
+          </div>
+
+          <!-- Timer -->
+          <div class="absolute top-20 left-4 z-20 bg-black/80 backdrop-blur-sm border border-gray-700 rounded-lg px-4 py-2">
+            <div class="text-xs text-gray-400 mb-1 tracking-wider">TIEMPO</div>
+            <div class="text-lg font-mono tracking-wider">
+              @if (gameState === 'GOL') {
+                <span class="text-green-400">{{ (finalTime / 1000).toFixed(2) }}s</span>
+              } @else {
+                <span class="text-white">{{ (elapsedTime / 1000).toFixed(2) }}s</span>
+              }
+            </div>
+          </div>
+
+          <!-- Game Field -->
+          <div 
+            class="relative w-full bg-gray-900 border-2 border-gray-700 rounded-lg overflow-hidden cursor-none"
+            style="height: 500px; background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA5MDAgNTAwIj48cmVjdCBmaWxsPSIjMjIyIiB3aWR0aD0iOTAwIiBoZWlnaHQ9IjUwMCIvPjxsaW5lIHgxPSI0NTAiIHkxPSIwIiB4Mj0iNDUwIiB5Mj0iNTAwIiBzdHJva2U9IiM0NDQiIHN0cm9rZS13aWR0aD0iMiIvPjxjaXJjbGUgY3g9IjQ1MCIgY3k9IjI1MCIgcj0iNTAiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzQ0NCIgc3Ryb2tlLXdpZHRoPSIyIi8+PHJlY3QgeD0iMCIgeT0iMTc1IiB3aWR0aD0iMTAwIiBoZWlnaHQ9IjE1MCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjNDQ0IiBzdHJva2Utd2lkdGg9IjIiLz48cmVjdCB4PSI4MDAiIHk9IjE3NSIgd2lkdGg9IjEwMCIgaGVpZ2h0PSIxNTAiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzQ0NCIgc3Ryb2tlLXdpZHRoPSIyIi8+PC9zdmc+'); background-size: cover; background-position: center;"
+            (mousemove)="onMouseMove($event)"
+            (click)="onGameClick($event)">
+
+            <!-- Custom Cursor -->
+            <div 
+              class="absolute w-6 h-6 bg-white rounded-full pointer-events-none z-30 transition-all duration-75"
+              [style.left.%]="mousePosition.x"
+              [style.top.%]="mousePosition.y"
+              style="transform: translate(-50%, -50%); box-shadow: 0 0 10px rgba(255,255,255,0.5);">
+            </div>
+
+            <!-- Hidden Ball -->
+            <div 
+              class="absolute w-8 h-8 bg-orange-500 rounded-full transition-all duration-500"
+              [class.opacity-0]="!ballFound && gameState !== 'GOL'"
+              [class.opacity-100]="ballFound || gameState === 'GOL'"
+              [style.left.%]="ballPosition.x"
+              [style.top.%]="ballPosition.y"
+              style="transform: translate(-50%, -50%); box-shadow: 0 0 20px rgba(251,146,60,0.8);">
+              <div class="absolute inset-0 bg-orange-400 rounded-full animate-ping"></div>
+            </div>
+
+            <!-- Hidden Goal -->
+            <div 
+              class="absolute transition-all duration-500"
+              [class.opacity-0]="!goalFound && gameState !== 'GOL'"
+              [class.opacity-100]="goalFound || gameState === 'GOL'"
+              [style.left.%]="goalPosition.x"
+              [style.top.%]="goalPosition.y"
+              style="transform: translate(-50%, -50%); width: 60px; height: 80px;">
+              <div class="w-full h-full border-4 border-white rounded-sm" style="background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%);">
+                <div class="grid grid-cols-3 gap-1 p-1">
+                  @for (i of [1,2,3,4,5,6,7,8,9]; track i) {
+                  <div class="bg-white/20 rounded-sm"></div>
+                }  
+                </div>
+              </div>
+              @if (goalFound || gameState === 'GOL') {
+                <div class="absolute inset-0 bg-green-400 rounded-sm animate-pulse opacity-30"></div>
+              }
+            </div>
+
+            <!-- Goal Animation -->
+            @if (gameState === 'GOL') {
+              <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
+                <div class="text-center">
+                  <div class="text-6xl md:text-8xl font-bold text-green-400 animate-bounce tracking-wider">
+                    ¡GOAL!
+                  </div>
+                  <div class="text-2xl md:text-3xl font-mono text-green-300 mt-4 tracking-wider">
+                    Tiempo: {{ (finalTime / 1000).toFixed(2) }}s
+                  </div>
+                </div>
+              </div>
+              <div class="absolute inset-0 bg-linear-to-r from-transparent via-green-400/20 to-transparent animate-pulse"></div>
+            }
+
+          </div>
+
+          <!-- Game Controls -->
+          <div class="mt-6 text-center">
+            @if (gameState === 'GOL') {
+              <button 
+                (click)="resetGame()"
+                class="bg-gray-800 hover:bg-gray-700 text-white px-6 py-3 rounded-lg border border-gray-600 transition-colors duration-300 tracking-wider text-sm">
+                JUGAR DE NUEVO
+              </button>
+            } @else {
+              <div class="text-gray-600 text-sm tracking-wide">
+                @switch (gameState) {
+                  @case ('BUSCANDO_PELOTA') {
+                    <span>Mueve el mouse y haz click cuando sientas el boost máximo</span>
+                  }
+                  @case ('BUSCANDO_ARCO') {
+                    <span>¡Ahora encuentra el arco! La pelota está en tu poder</span>
+                  }
+                }
+              </div>
+            }
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+</div>
