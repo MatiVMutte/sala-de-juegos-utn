@@ -5,10 +5,9 @@
         LIMBO
       </div>
       <div class="flex space-x-8">
-        <a class="text-gray-400 hover:text-white transition-colors duration-300 text-sm tracking-wide">INICIO</a>
-        <a class="text-gray-500 hover:text-white transition-colors duration-300 text-sm tracking-wide">JUEGOS</a>
-        <a class="text-gray-500 hover:text-white transition-colors duration-300 text-sm tracking-wide">QUIÉN SOY</a>
-        <a class="text-gray-500 hover:text-white transition-colors duration-300 text-sm tracking-wide">LOGIN</a>
+        @for (item of menuItems; track item.route) {
+          <a [routerLink]="item.route" class="text-gray-400 hover:text-white transition-colors duration-300 text-sm tracking-wide cursor-pointer">{{ item.label }}</a>
+        }
       </div>
     </div>
   </div>
