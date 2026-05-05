@@ -1,103 +1,132 @@
-<div class="min-h-screen bg-black text-white overflow-hidden relative">
-  <!-- Background subtle gradient -->
-  <div class="absolute inset-0 bg-linear-to-b from-gray-900 via-black to-gray-950 opacity-50"></div>
-  
-  <!-- Main content -->
-  <div class="relative z-10">
-    <app-nav-bar></app-nav-bar>
-
+<app-page-wrapper>
     <!-- Hero Section -->
-    <section class="min-h-screen flex items-center justify-center px-6 pt-20">
-      <div class="max-w-4xl w-full">
-        <!-- Header -->
-        <div class="text-center mb-16">
-          <h1 class="text-6xl md:text-8xl font-thin mb-4 tracking-wider text-gray-200">
-            {{ title }}
-          </h1>
-          <p class="text-xl md:text-2xl text-gray-500 tracking-wide">
-            {{ subtitle }}
-          </p>
-        </div>
+    <section class="min-h-screen flex items-center justify-center px-6 pt-20 pb-20">
+      <div class="max-w-6xl w-full">
+        <app-page-header [title]="title" [subtitle]="subtitle"></app-page-header>
 
-        @if (loading()) {
-          <!-- Loading State -->
-          <div class="text-center py-12">
-            <div class="text-gray-500 text-lg animate-pulse">Cargando...</div>
-          </div>
-        } @else if (error()) {
-          <!-- Error State -->
-          <div class="text-center py-12">
-            <div class="text-red-400 text-lg">{{ error() }}</div>
-          </div>
-        } @else if (githubUser(); as user) {
-          <!-- GitHub Profile -->
-          <div class="text-center mb-12">
-            <img 
-              [src]="user.avatar_url" 
-              [alt]="user.name"
-              class="w-32 h-32 rounded-full mx-auto mb-6 border-2 border-gray-700"
-            >
-            <h2 class="text-3xl font-thin mb-2 text-gray-200">{{ user.name }}</h2>
-            <p class="text-gray-500 text-lg mb-4">&#64;{{ user.login }}</p>
-            <p class="text-gray-400 max-w-2xl mx-auto leading-relaxed">{{ user.bio }}</p>
+        <!-- Two-column layout -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-start">
+
+          <!-- LEFT: Personal info -->
+          <div>
+            @if (loading()) {
+              <!-- Loading State -->
+              <div class="text-center py-12">
+                <div class="text-gray-500 text-lg animate-pulse">{{ loadingText }}</div>
+              </div>
+            } @else if (error()) {
+              <!-- Error State -->
+              <div class="text-center py-12">
+                <div class="text-red-400 text-lg">{{ error() }}</div>
+              </div>
+            } @else if (githubUser(); as user) {
+              <!-- GitHub Profile -->
+              <div class="text-center mb-12">
+                <img 
+                  [src]="user.avatar_url" 
+                  [alt]="user.name"
+                  class="w-32 h-32 rounded-full mx-auto mb-6 border-2 border-gray-700"
+                >
+                <h2 class="text-3xl font-thin mb-2 text-gray-200">{{ user.name }}</h2>
+                <p class="text-gray-500 text-lg mb-4">&#64;{{ user.login }}</p>
+                <p class="text-gray-400 leading-relaxed">{{ user.bio }}</p>
+              </div>
+
+              <!-- Stats -->
+              <div class="flex justify-center gap-8 mb-12">
+                <div class="text-center">
+                  <div class="text-2xl font-thin text-gray-200">{{ user.public_repos }}</div>
+                  <div class="text-gray-600 text-sm">{{ labelRepos }}</div>
+                </div>
+                <div class="text-center">
+                  <div class="text-2xl font-thin text-gray-200">{{ user.followers }}</div>
+                  <div class="text-gray-600 text-sm">{{ labelFollowers }}</div>
+                </div>
+                <div class="text-center">
+                  <div class="text-2xl font-thin text-gray-200">{{ user.following }}</div>
+                  <div class="text-gray-600 text-sm">{{ labelFollowing }}</div>
+                </div>
+              </div>
+
+              <!-- Info -->
+              <div class="mb-8">
+                <app-section-card [title]="sectionInfoTitle">
+                  <div class="space-y-2 text-gray-500">
+                    <p><span class="text-gray-400">{{ labelCurrently }}</span> {{ user.company }}</p>
+                    <p><span class="text-gray-400">{{ labelLocation }}</span> {{ user.location }}</p>
+                  </div>
+                </app-section-card>
+              </div>
+
+              <!-- Links -->
+              <div class="text-center space-y-4">
+                <a 
+                  [href]="user.html_url" 
+                  target="_blank" 
+                  class="inline-block text-gray-400 hover:text-white transition-colors duration-300 text-sm tracking-wide border border-gray-700 px-6 py-2 rounded-lg hover:border-gray-500"
+                >
+                  {{ linkGitHub }}
+                </a>
+                <br>
+                <a 
+                  [href]="user.blog" 
+                  target="_blank" 
+                  class="inline-block text-gray-400 hover:text-white transition-colors duration-300 text-sm tracking-wide"
+                >
+                  {{ linkLinkedIn }}
+                </a>
+              </div>
+            }
           </div>
 
-          <!-- Stats -->
-          <div class="flex justify-center gap-8 mb-12">
-            <div class="text-center">
-              <div class="text-2xl font-thin text-gray-200">{{ user.public_repos }}</div>
-              <div class="text-gray-600 text-sm">Repositorios</div>
+          <!-- RIGHT: Project info + game tutorial -->
+            <div>
+              <!-- Project Info -->
+              <div class="mb-12">
+                <app-section-card [title]="sectionProjectTitle">
+                  <p class="text-gray-500 leading-relaxed font-light">{{ projectInfo }}</p>
+                </app-section-card>
+              </div>
+
+              <!-- Hidden Goal Tutorial -->
+              <div>
+                <div class="mb-8">
+                  <app-section-card [title]="sectionGameTitle">
+                    <p class="text-gray-600 text-sm tracking-widest uppercase mb-1">{{ gameTitle }}</p>
+                    <p class="text-gray-500 leading-relaxed font-light">{{ gameDescription }}</p>
+                  </app-section-card>
+                </div>
+
+                <!-- Steps -->
+                <div class="space-y-6 pl-8">
+                  @for (step of gameSteps; track step.title; let i = $index) {
+                    <div class="flex items-start gap-6">
+                      <div class="shrink-0 w-10 h-10 rounded-full border border-gray-700 flex items-center justify-center text-gray-400 font-thin text-lg">{{ i + 1 }}</div>
+                      <div>
+                        <h4 class="text-gray-300 font-light tracking-wider mb-1">{{ step.title }}</h4>
+                        <p class="text-gray-600 text-sm leading-relaxed">{{ step.description }}</p>
+                      </div>
+                    </div>
+                  }
+                </div>
+
+                <!-- Tips -->
+                <div class="mt-8 pl-8 border-l border-gray-800">
+                  <p class="text-gray-600 text-xs tracking-widest uppercase mb-3">{{ gameTipsTitle }}</p>
+                  <ul class="space-y-2 text-gray-600 text-sm">
+                    @for (tip of gameTips; track tip) {
+                      <li class="flex items-start gap-2">
+                        <span class="text-gray-700 mt-0.5">—</span>
+                        <span>{{ tip }}</span>
+                      </li>
+                    }
+                  </ul>
+                </div>
+              </div>
             </div>
-            <div class="text-center">
-              <div class="text-2xl font-thin text-gray-200">{{ user.followers }}</div>
-              <div class="text-gray-600 text-sm">Seguidores</div>
-            </div>
-            <div class="text-center">
-              <div class="text-2xl font-thin text-gray-200">{{ user.following }}</div>
-              <div class="text-gray-600 text-sm">Siguiendo</div>
-            </div>
-          </div>
 
-          <!-- Info -->
-          <div class="border-l-2 border-gray-800 pl-8 py-4 mb-8">
-            <h3 class="text-xl font-thin mb-4 tracking-wider text-gray-300">INFORMACIÓN</h3>
-            <div class="space-y-2 text-gray-500">
-              <p><span class="text-gray-400">Actualmente:</span> {{ user.company }}</p>
-              <p><span class="text-gray-400">Ubicación:</span> {{ user.location }}</p>
-            </div>
-          </div>
-
-          <!-- Links -->
-          <div class="text-center space-y-4">
-            <a 
-              [href]="user.html_url" 
-              target="_blank" 
-              class="inline-block text-gray-400 hover:text-white transition-colors duration-300 text-sm tracking-wide border border-gray-700 px-6 py-2 rounded-lg hover:border-gray-500"
-            >
-              Ver perfil en GitHub
-            </a>
-            <br>
-            <a 
-              [href]="user.blog" 
-              target="_blank" 
-              class="inline-block text-gray-400 hover:text-white transition-colors duration-300 text-sm tracking-wide"
-            >
-              LinkedIn
-            </a>
-          </div>
-        }
-
-        <!-- Project Info -->
-        <div class="border-l-2 border-gray-800 pl-8 py-4 mt-12">
-          <h3 class="text-xl font-thin mb-4 tracking-wider text-gray-300">SOBRE EL PROYECTO</h3>
-          <p class="text-gray-500 text-lg leading-relaxed font-light">
-            LIMBO GAMES es una plataforma diseñada para medir capacidades cognitivas y motrices a través de juegos interactivos. La inspiración visual proviene del juego Limbo, con su estética minimalista y atmosférica.
-          </p>
         </div>
       </div>
     </section>
 
-    <!-- Footer -->
-    <app-footer></app-footer>
-  </div>
-</div>
+</app-page-wrapper>

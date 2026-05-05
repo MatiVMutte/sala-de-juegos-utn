@@ -1,12 +1,12 @@
 import { Component } from '@angular/core';
-import { NavBar } from '../../../../shared/nav-bar/nav-bar';
-import { Footer } from '../../../../shared/footer/footer';
-import { GameCard } from '../../../../shared/game-card/game-card';
+import { PageWrapper } from '../../../../shared/page-wrapper/page-wrapper';
+import { PageHeader } from '../../../../shared/page-header/page-header';
+import { GamesGrid } from '../../../../shared/games-grid/games-grid';
 import { GAMES_DATA } from '../../../games/shared/games.data';
 
 @Component({
   selector: 'app-games-list-page',
-  imports: [NavBar, Footer, GameCard],
+  imports: [PageWrapper, PageHeader, GamesGrid],
   templateUrl: './games-list-page.html',
 })
 export class GamesListPage {
@@ -15,4 +15,6 @@ export class GamesListPage {
   public description: string = 'Todos los juegos requieren inicio de sesión para registrar tus estadísticas y comparar tus tiempos con otros jugadores.';
   
   public games = GAMES_DATA;
+
+  public loginPrompt: string = 'INICIA SESIÓN PARA ACCEDER A LOS JUEGOS';
 }

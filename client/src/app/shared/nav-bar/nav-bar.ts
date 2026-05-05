@@ -9,4 +9,5 @@ import { menuItems } from '../../app.routes';
 })
 export class NavBar {
   public readonly menuItems = menuItems;
+  public readonly brandName: string = 'LIMBO';
 }

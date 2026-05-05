@@ -1,12 +1,25 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { NavBar } from '../../../../../shared/nav-bar/nav-bar';
+import { PageWrapper } from '../../../../../shared/page-wrapper/page-wrapper';
 
 @Component({
   selector: 'app-hidden-goal-game',
-  imports: [NavBar],
+  imports: [PageWrapper],
   templateUrl: './hidden-goal-game.html',
 })
 export class HiddenGoalGame implements OnInit, OnDestroy {
+  // Texts
+  public pageTitle: string = 'HIDDEN GOAL';
+  public pageSubtitle: string = 'Encuentra la pelota y luego el arco. ¡Siente el boost!';
+  public labelBoost: string = 'BOOST';
+  public labelTime: string = 'TIEMPO';
+  public statusSearchBall: string = 'BUSCANDO PELOTA';
+  public statusSearchGoal: string = 'BUSCANDO ARCO';
+  public statusGoal: string = '¡GOL!';
+  public goalTimePrefix: string = 'Tiempo:';
+  public btnPlayAgain: string = 'JUGAR DE NUEVO';
+  public hintSearchBall: string = 'Mueve el mouse y haz click cuando sientas el boost máximo';
+  public hintSearchGoal: string = '¡Ahora encuentra el arco! La pelota está en tu poder';
+
   gameState: 'BUSCANDO_PELOTA' | 'BUSCANDO_ARCO' | 'GOL' = 'BUSCANDO_PELOTA';
   boostPercentage: number = 0;
   boostColor: string = 'bg-blue-500';

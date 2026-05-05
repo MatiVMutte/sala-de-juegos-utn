@@ -1,10 +1,4 @@
-<div class="min-h-screen bg-black text-white overflow-hidden relative">
-  <!-- Background subtle gradient -->
-  <div class="absolute inset-0 bg-linear-to-b from-gray-900 via-black to-gray-950 opacity-50"></div>
-  
-  <!-- Main content -->
-  <div class="relative z-10">
-    <app-nav-bar></app-nav-bar>
+<app-page-wrapper>
 
     <!-- Game Section -->
     <section class="min-h-screen flex items-center justify-center px-6 pt-20">
@@ -12,10 +6,10 @@
         <!-- Game Title -->
         <div class="text-center mb-8">
           <h1 class="text-4xl md:text-6xl font-thin mb-4 tracking-wider text-gray-200">
-            HIDDEN GOAL
+            {{ pageTitle }}
           </h1>
           <p class="text-gray-500 text-lg tracking-wide">
-            Encuentra la pelota y luego el arco. ¡Siente el boost!
+            {{ pageSubtitle }}
           </p>
         </div>
 
@@ -23,7 +17,7 @@
         <div class="relative mx-auto" style="max-width: 900px;">
           <!-- Boost Meter -->
           <div class="absolute top-4 right-4 z-20 bg-black/80 backdrop-blur-sm border border-gray-700 rounded-lg p-3">
-            <div class="text-xs text-gray-400 mb-1 tracking-wider">BOOST</div>
+            <div class="text-xs text-gray-400 mb-1 tracking-wider">{{ labelBoost }}</div>
             <div class="w-32 h-3 bg-gray-800 rounded-full overflow-hidden">
               <div 
                 class="h-full transition-all duration-300 ease-out"
@@ -39,13 +33,13 @@
             <div class="text-sm tracking-wider">
               @switch (gameState) {
                 @case ('BUSCANDO_PELOTA') {
-                  <span class="text-blue-400">BUSCANDO PELOTA</span>
+                  <span class="text-blue-400">{{ statusSearchBall }}</span>
                 }
                 @case ('BUSCANDO_ARCO') {
-                  <span class="text-orange-400">BUSCANDO ARCO</span>
+                  <span class="text-orange-400">{{ statusSearchGoal }}</span>
                 }
                 @case ('GOL') {
-                  <span class="text-green-400 animate-pulse">¡GOAL!</span>
+                  <span class="text-green-400 animate-pulse">{{ statusGoal }}</span>
                 }
               }
             </div>
@@ -53,7 +47,7 @@
 
           <!-- Timer -->
           <div class="absolute top-20 left-4 z-20 bg-black/80 backdrop-blur-sm border border-gray-700 rounded-lg px-4 py-2">
-            <div class="text-xs text-gray-400 mb-1 tracking-wider">TIEMPO</div>
+            <div class="text-xs text-gray-400 mb-1 tracking-wider">{{ labelTime }}</div>
             <div class="text-lg font-mono tracking-wider">
               @if (gameState === 'GOL') {
                 <span class="text-green-400">{{ (finalTime / 1000).toFixed(2) }}s</span>
@@ -114,10 +108,10 @@
               <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
                 <div class="text-center">
                   <div class="text-6xl md:text-8xl font-bold text-green-400 animate-bounce tracking-wider">
-                    ¡GOAL!
+                    {{ statusGoal }}
                   </div>
                   <div class="text-2xl md:text-3xl font-mono text-green-300 mt-4 tracking-wider">
-                    Tiempo: {{ (finalTime / 1000).toFixed(2) }}s
+                    {{ goalTimePrefix }} {{ (finalTime / 1000).toFixed(2) }}s
                   </div>
                 </div>
               </div>
@@ -132,16 +126,16 @@
               <button 
                 (click)="resetGame()"
                 class="bg-gray-800 hover:bg-gray-700 text-white px-6 py-3 rounded-lg border border-gray-600 transition-colors duration-300 tracking-wider text-sm">
-                JUGAR DE NUEVO
+                {{ btnPlayAgain }}
               </button>
             } @else {
               <div class="text-gray-600 text-sm tracking-wide">
                 @switch (gameState) {
                   @case ('BUSCANDO_PELOTA') {
-                    <span>Mueve el mouse y haz click cuando sientas el boost máximo</span>
+                    <span>{{ hintSearchBall }}</span>
                   }
                   @case ('BUSCANDO_ARCO') {
-                    <span>¡Ahora encuentra el arco! La pelota está en tu poder</span>
+                    <span>{{ hintSearchGoal }}</span>
                   }
                 }
               </div>
@@ -150,5 +144,4 @@
         </div>
       </div>
     </section>
-  </div>
-</div>
+</app-page-wrapper>

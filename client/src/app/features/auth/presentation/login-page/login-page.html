@@ -1,71 +1,44 @@
-<div class="min-h-screen bg-black text-white overflow-hidden relative">
-  <!-- Background subtle gradient -->
-  <div class="absolute inset-0 bg-linear-to-b from-gray-900 via-black to-gray-950 opacity-50"></div>
-
-  <!-- Main content -->
-  <div class="relative z-10">
-    <app-nav-bar></app-nav-bar>
-
+<app-page-wrapper>
     <!-- Login Section -->
     <section class="min-h-screen flex items-center justify-center px-6 pt-20">
       <div class="max-w-md w-full">
-        <!-- Header -->
-        <div class="text-center mb-12">
-          <h1 class="text-4xl md:text-5xl font-thin mb-4 tracking-wider text-gray-200">
-            {{ title }}
-          </h1>
-          <p class="text-gray-500 tracking-wide">
-            {{ subtitle }}
-          </p>
-        </div>
+        <app-page-header [title]="title" [subtitle]="subtitle"></app-page-header>
 
         <!-- Form -->
         <form class="space-y-6">
-          <!-- Email -->
-          <div>
-            <label class="block text-xs text-gray-500 tracking-widest mb-2">EMAIL</label>
-            <input
-              type="email"
-              placeholder="tu@correo.com"
-              class="w-full bg-transparent border border-gray-800 rounded-lg px-4 py-3 text-gray-200 placeholder-gray-700 focus:outline-none focus:border-gray-500 transition-colors duration-300"
-            >
-          </div>
-
-          <!-- Password -->
-          <div>
-            <label class="block text-xs text-gray-500 tracking-widest mb-2">CONTRASEÑA</label>
-            <input
-              type="password"
-              placeholder="••••••••"
-              class="w-full bg-transparent border border-gray-800 rounded-lg px-4 py-3 text-gray-200 placeholder-gray-700 focus:outline-none focus:border-gray-500 transition-colors duration-300"
-            >
-          </div>
+          @for (field of fields; track field.label) {
+            <div>
+              <label class="block text-xs text-gray-500 tracking-widest mb-2">{{ field.label }}</label>
+              <input
+                [type]="field.type"
+                [placeholder]="field.placeholder"
+                class="w-full bg-transparent border border-gray-800 rounded-lg px-4 py-3 text-gray-200 placeholder-gray-700 focus:outline-none focus:border-gray-500 transition-colors duration-300"
+              >
+            </div>
+          }
 
           <!-- Submit -->
           <button
             type="submit"
             class="w-full bg-white text-black py-3 rounded-lg tracking-widest text-sm font-medium hover:bg-gray-200 transition-colors duration-300"
           >
-            INGRESAR
+            {{ btnSubmit }}
           </button>
         </form>
 
         <!-- Register Link -->
         <div class="text-center mt-8">
           <p class="text-gray-600 text-sm tracking-wide">
-            ¿No tienes cuenta?
+            {{ noAccountText }}
             <a
               routerLink="/registro"
               class="text-gray-300 hover:text-white transition-colors duration-300 ml-2 underline"
             >
-              REGISTRARSE
+              {{ linkRegister }}
             </a>
           </p>
         </div>
       </div>
     </section>
 
-    <!-- Footer -->
-    <app-footer></app-footer>
-  </div>
-</div>
+</app-page-wrapper>
