@@ -1,22 +1,9 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { PageWrapper } from '../../../../shared/page-wrapper/page-wrapper';
-import { PageHeader } from '../../../../shared/page-header/page-header';
-import { SectionCard } from '../../../../shared/section-card/section-card';
-
-interface GitHubUser {
-  login: string;
-  name: string;
-  avatar_url: string;
-  bio: string;
-  public_repos: number;
-  followers: number;
-  following: number;
-  company: string;
-  location: string;
-  blog: string;
-  html_url: string;
-}
+import { PageWrapper } from '../../../../shared/ui/page-wrapper/page-wrapper';
+import { PageHeader } from '../../../../shared/ui/page-header/page-header';
+import { SectionCard } from '../../../../shared/ui/section-card/section-card';
+import { GithubService } from '../../infrastructure/github.service';
+import { GitHubUser } from '../../domain/github-user.model';
 
 @Component({
   selector: 'app-about-me-page',
@@ -80,24 +67,19 @@ export class AboutMePage implements OnInit {
     'Cada partida genera posiciones aleatorias: ninguna ronda será igual a la anterior.'
   ];  
   
-  private http = inject(HttpClient);
-  
+  private githubService = inject(GithubService);
+
   ngOnInit() {
-    this.fetchGitHubData();
-  }
-  
-  private fetchGitHubData() {
-    this.http.get<GitHubUser>(`https://api.github.com/users/${this.userURL}`)
-      .subscribe({
-        next: (data) => {
-          this.githubUser.set(data);
-          this.loading.set(false);
-        },
-        error: (err) => {
-          this.error.set('No se pudieron cargar los datos de GitHub');
-          this.loading.set(false);
-          console.error('Error fetching GitHub data:', err);
-        }
-      });
+    this.githubService.getUser(this.userURL).subscribe({
+      next: (data) => {
+        this.githubUser.set(data);
+        this.loading.set(false);
+      },
+      error: (err) => {
+        this.error.set('No se pudieron cargar los datos de GitHub');
+        this.loading.set(false);
+        console.error('Error fetching GitHub data:', err);
+      }
+    });
   }
 }

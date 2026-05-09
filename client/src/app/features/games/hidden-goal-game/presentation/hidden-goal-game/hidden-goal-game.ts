@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { PageWrapper } from '../../../../../shared/page-wrapper/page-wrapper';
+import { PageWrapper } from '../../../../../shared/ui/page-wrapper/page-wrapper';
 
 @Component({
   selector: 'app-hidden-goal-game',

@@ -1,9 +1,5 @@
 import { Component, Input } from '@angular/core';
-
-export interface GameCardData {
-  title: string;
-  description: string;
-}
+import { GameCardData } from '../../../features/games/domain/game.model';
 
 @Component({
   selector: 'app-game-card',

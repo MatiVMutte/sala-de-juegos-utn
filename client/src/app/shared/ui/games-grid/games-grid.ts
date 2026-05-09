@@ -1,5 +1,6 @@
 import { Component, Input } from '@angular/core';
-import { GameCard, GameCardData } from '../game-card/game-card';
+import { GameCard } from '../game-card/game-card';
+import { GameCardData } from '../../../features/games/domain/game.model';
 
 @Component({
   selector: 'app-games-grid',

@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
-import { PageWrapper } from '../../../../shared/page-wrapper/page-wrapper';
-import { PageHeader } from '../../../../shared/page-header/page-header';
-import { GamesGrid } from '../../../../shared/games-grid/games-grid';
-import { GAMES_DATA } from '../../../games/shared/games.data';
+import { PageWrapper } from '../../../../shared/ui/page-wrapper/page-wrapper';
+import { PageHeader } from '../../../../shared/ui/page-header/page-header';
+import { GamesGrid } from '../../../../shared/ui/games-grid/games-grid';
+import { GAMES_DATA } from '../../../games/domain/game.model';
 
 @Component({
   selector: 'app-games-list-page',

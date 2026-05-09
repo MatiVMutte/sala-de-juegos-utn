@@ -1,33 +1,100 @@
 <app-page-wrapper>
     <!-- Register Section -->
     <section class="min-h-screen flex items-center justify-center px-6 pt-20 pb-12">
-      <div class="max-w-md w-full">
+      <div class="max-w-md w-full mx-auto">
         <app-page-header [title]="title" [subtitle]="subtitle"></app-page-header>
 
         <!-- Form -->
-        <form class="space-y-6">
-          @for (field of fields; track field.label) {
+        <form class="space-y-5 text-left" [formGroup]="form" (ngSubmit)="onSubmit()">
+          <div class="grid grid-cols-2 gap-4">
             <div>
-              <label class="block text-xs text-gray-500 tracking-widest mb-2">{{ field.label }}</label>
-              <input
-                [type]="field.type"
-                [placeholder]="field.placeholder"
-                class="w-full bg-transparent border border-gray-800 rounded-lg px-4 py-3 text-gray-200 placeholder-gray-700 focus:outline-none focus:border-gray-500 transition-colors duration-300"
-              >
+              <label class="block text-xs text-gray-400 tracking-widest mb-2">NOMBRE</label>
+              <input type="text" formControlName="nombre" placeholder="Tu nombre"
+                class="w-full bg-transparent border px-4 py-3 text-gray-200 placeholder-gray-600 focus:outline-none transition-colors duration-300"
+                [class.border-gray-800]="!nombreControl.invalid || !nombreControl.touched"
+                [class.border-red-800]="nombreControl.invalid && nombreControl.touched">
+              @if (nombreControl.touched && nombreControl.invalid) {
+                <p class="text-red-400 text-xs mt-1">Mínimo 2 caracteres.</p>
+              }
+            </div>
+            <div>
+              <label class="block text-xs text-gray-400 tracking-widest mb-2">APELLIDO</label>
+              <input type="text" formControlName="apellido" placeholder="Tu apellido"
+                class="w-full bg-transparent border px-4 py-3 text-gray-200 placeholder-gray-600 focus:outline-none transition-colors duration-300"
+                [class.border-gray-800]="!apellidoControl.invalid || !apellidoControl.touched"
+                [class.border-red-800]="apellidoControl.invalid && apellidoControl.touched">
+              @if (apellidoControl.touched && apellidoControl.invalid) {
+                <p class="text-red-400 text-xs mt-1">Mínimo 2 caracteres.</p>
+              }
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-xs text-gray-400 tracking-widest mb-2">EDAD</label>
+            <input type="number" formControlName="edad" placeholder="Tu edad" min="1" max="120"
+              class="w-full bg-transparent border px-4 py-3 text-gray-200 placeholder-gray-600 focus:outline-none transition-colors duration-300"
+              [class.border-gray-800]="!edadControl.invalid || !edadControl.touched"
+              [class.border-red-800]="edadControl.invalid && edadControl.touched">
+            @if (edadControl.touched && edadControl.invalid) {
+              <p class="text-red-400 text-xs mt-1">Ingresá una edad entre 1 y 120.</p>
+            }
+          </div>
+
+          <div>
+            <label class="block text-xs text-gray-400 tracking-widest mb-2">EMAIL</label>
+            <input type="email" formControlName="email" placeholder="tu@correo.com"
+              class="w-full bg-transparent border px-4 py-3 text-gray-200 placeholder-gray-600 focus:outline-none transition-colors duration-300"
+              [class.border-gray-800]="!emailControl.invalid || !emailControl.touched"
+              [class.border-red-800]="emailControl.invalid && emailControl.touched">
+            @if (emailControl.touched && emailControl.hasError('required')) {
+              <p class="text-red-400 text-xs mt-1">El email es requerido.</p>
+            } @else if (emailControl.touched && emailControl.hasError('email')) {
+              <p class="text-red-400 text-xs mt-1">Ingresá un email válido.</p>
+            }
+          </div>
+
+          <div>
+            <label class="block text-xs text-gray-400 tracking-widest mb-2">CONTRASEÑA</label>
+            <input type="password" formControlName="password" placeholder="••••••••"
+              class="w-full bg-transparent border px-4 py-3 text-gray-200 placeholder-gray-600 focus:outline-none transition-colors duration-300"
+              [class.border-gray-800]="!passwordControl.invalid || !passwordControl.touched"
+              [class.border-red-800]="passwordControl.invalid && passwordControl.touched">
+            @if (passwordControl.touched && passwordControl.hasError('required')) {
+              <p class="text-red-400 text-xs mt-1">La contraseña es requerida.</p>
+            } @else if (passwordControl.touched && passwordControl.hasError('minlength')) {
+              <p class="text-red-400 text-xs mt-1">Mínimo 6 caracteres.</p>
+            }
+          </div>
+
+          <div>
+            <label class="block text-xs text-gray-400 tracking-widest mb-2">CONFIRMAR CONTRASEÑA</label>
+            <input type="password" formControlName="confirmPassword" placeholder="••••••••"
+              class="w-full bg-transparent border px-4 py-3 text-gray-200 placeholder-gray-600 focus:outline-none transition-colors duration-300"
+              [class.border-gray-800]="!(confirmPasswordControl.touched && form.hasError('passwordMismatch'))"
+              [class.border-red-800]="confirmPasswordControl.touched && form.hasError('passwordMismatch')">
+            @if (confirmPasswordControl.touched && form.hasError('passwordMismatch')) {
+              <p class="text-red-400 text-xs mt-1">Las contraseñas no coinciden.</p>
+            }
+          </div>
+
+          @if (errorMessage()) {
+            <div class="border border-red-900 bg-red-950/30 px-4 py-3">
+              <p class="text-red-400 text-sm tracking-wide">{{ errorMessage() }}</p>
             </div>
           }
 
           <!-- Submit -->
           <button
             type="submit"
-            class="w-full bg-white text-black py-3 rounded-lg tracking-widest text-sm font-medium hover:bg-gray-200 transition-colors duration-300"
+            [disabled]="loading()"
+            class="w-full bg-white text-black py-3 tracking-widest text-sm font-medium hover:bg-gray-200 transition-colors duration-300 disabled:opacity-50"
           >
-            {{ btnSubmit }}
+            {{ loading() ? 'CARGANDO...' : btnSubmit }}
           </button>
         </form>
 
         <!-- Login Link -->
-        <div class="text-center mt-8">
+        <div class="text-center mt-6">
           <p class="text-gray-600 text-sm tracking-wide">
             {{ hasAccountText }}
             <a

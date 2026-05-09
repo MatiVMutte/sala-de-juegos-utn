@@ -6,24 +6,42 @@
 
         <!-- Description -->
         <div class="max-w-2xl mx-auto mb-16">
-          <p class="text-gray-500 text-lg leading-relaxed font-light">
+          <p class="text-gray-400 text-lg leading-relaxed font-light">
             {{ description }}
           </p>
         </div>
 
         <!-- Call to action -->
-        <div class="inline-block">
-          <div class="border border-gray-700 px-8 py-3 text-gray-400 tracking-widest text-sm">
-            {{ ctaLabel }}
+        @if (isLoggedIn()) {
+          <div class="flex flex-col items-center gap-6">
+            <div class="border border-gray-700 px-12 py-6 text-center">
+              <p class="text-xs text-gray-500 tracking-widest mb-2">BIENVENIDO DE NUEVO</p>
+              <p class="text-3xl font-thin tracking-widest text-gray-100">{{ currentUser()?.nombre | uppercase }} {{ currentUser()?.apellido | uppercase }}</p>
+            </div>
+            <button
+              (click)="logout()"
+              class="text-gray-500 hover:text-gray-300 transition-colors duration-300 text-xs tracking-widest"
+            >CERRAR SESIÓN</button>
           </div>
-        </div>
+        } @else {
+          <div class="flex items-center justify-center gap-4">
+            <a
+              routerLink="/login"
+              class="border border-gray-700 px-8 py-3 text-gray-400 tracking-widest text-sm hover:border-gray-500 hover:text-gray-200 transition-colors duration-300"
+            >INICIAR SESIÓN</a>
+            <a
+              routerLink="/registro"
+              class="bg-white text-black px-8 py-3 tracking-widest text-sm hover:bg-gray-200 transition-colors duration-300"
+            >REGISTRARSE</a>
+          </div>
+        }
       </div>
     </section>
 
     <!-- Games Section -->
     <section class="py-20 px-6 border-t border-gray-900">
       <div class="container mx-auto">
-        <h2 class="text-4xl font-thin text-center mb-16 tracking-wider text-gray-300">
+        <h2 class="text-4xl font-thin text-center mb-16 tracking-wider text-gray-200">
           {{ sectionGamesTitle }}
         </h2>
         <app-games-grid [games]="games" [loginPrompt]="loginPrompt"></app-games-grid>

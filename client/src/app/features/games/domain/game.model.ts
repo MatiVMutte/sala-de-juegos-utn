@@ -1,4 +1,7 @@
-import { GameCardData } from '../../../shared/game-card/game-card';
+export interface GameCardData {
+  title: string;
+  description: string;
+}
 
 export const GAMES_DATA: GameCardData[] = [
   {

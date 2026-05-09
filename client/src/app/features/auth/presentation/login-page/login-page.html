@@ -5,29 +5,74 @@
         <app-page-header [title]="title" [subtitle]="subtitle"></app-page-header>
 
         <!-- Form -->
-        <form class="space-y-6">
-          @for (field of fields; track field.label) {
-            <div>
-              <label class="block text-xs text-gray-500 tracking-widest mb-2">{{ field.label }}</label>
-              <input
-                [type]="field.type"
-                [placeholder]="field.placeholder"
-                class="w-full bg-transparent border border-gray-800 rounded-lg px-4 py-3 text-gray-200 placeholder-gray-700 focus:outline-none focus:border-gray-500 transition-colors duration-300"
-              >
+        <form class="space-y-6" [formGroup]="form" (ngSubmit)="onSubmit()">
+          <div>
+            <label class="block text-xs text-gray-400 tracking-widest mb-2">EMAIL</label>
+            <input
+              type="email"
+              formControlName="email"
+              placeholder="tu@correo.com"
+              class="w-full bg-transparent border px-4 py-3 text-gray-200 placeholder-gray-600 focus:outline-none transition-colors duration-300"
+              [class.border-gray-800]="!emailControl.invalid || !emailControl.touched"
+              [class.border-red-800]="emailControl.invalid && emailControl.touched"
+              [class.focus:border-gray-500]="!emailControl.invalid"
+            >
+            @if (emailControl.touched && emailControl.hasError('required')) {
+              <p class="text-red-400 text-xs mt-1 tracking-wide">El email es requerido.</p>
+            } @else if (emailControl.touched && emailControl.hasError('email')) {
+              <p class="text-red-400 text-xs mt-1 tracking-wide">Ingresá un email válido.</p>
+            }
+          </div>
+          <div>
+            <label class="block text-xs text-gray-400 tracking-widest mb-2">CONTRASEÑA</label>
+            <input
+              type="password"
+              formControlName="password"
+              placeholder="••••••••"
+              class="w-full bg-transparent border px-4 py-3 text-gray-200 placeholder-gray-600 focus:outline-none transition-colors duration-300"
+              [class.border-gray-800]="!passwordControl.invalid || !passwordControl.touched"
+              [class.border-red-800]="passwordControl.invalid && passwordControl.touched"
+            >
+            @if (passwordControl.touched && passwordControl.hasError('required')) {
+              <p class="text-red-400 text-xs mt-1 tracking-wide">La contraseña es requerida.</p>
+            } @else if (passwordControl.touched && passwordControl.hasError('minlength')) {
+              <p class="text-red-400 text-xs mt-1 tracking-wide">Mínimo 6 caracteres.</p>
+            }
+          </div>
+
+          @if (errorMessage()) {
+            <div class="border border-red-900 bg-red-950/30 px-4 py-3">
+              <p class="text-red-400 text-sm tracking-wide">{{ errorMessage() }}</p>
             </div>
           }
 
           <!-- Submit -->
           <button
             type="submit"
-            class="w-full bg-white text-black py-3 rounded-lg tracking-widest text-sm font-medium hover:bg-gray-200 transition-colors duration-300"
+            [disabled]="loading()"
+            class="w-full bg-white text-black py-3 tracking-widest text-sm font-medium hover:bg-gray-200 transition-colors duration-300 disabled:opacity-50"
           >
-            {{ btnSubmit }}
+            {{ loading() ? 'CARGANDO...' : btnSubmit }}
           </button>
         </form>
 
+        <!-- Quick Login -->
+        <div class="mt-8">
+          <p class="text-center text-gray-700 text-xs tracking-widest mb-3">{{ quickUsersLabel }}</p>
+          <div class="flex gap-2">
+            @for (u of quickUsers; track u.label) {
+              <button
+                (click)="quickLogin(u.email, u.password)"
+                class="flex-1 border border-gray-800 text-gray-500 text-xs py-2 rounded hover:border-gray-600 hover:text-gray-300 transition-colors duration-300"
+              >
+                {{ u.label }}
+              </button>
+            }
+          </div>
+        </div>
+
         <!-- Register Link -->
-        <div class="text-center mt-8">
+        <div class="text-center mt-6">
           <p class="text-gray-600 text-sm tracking-wide">
             {{ noAccountText }}
             <a

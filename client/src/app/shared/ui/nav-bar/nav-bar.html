@@ -1,0 +1,25 @@
+<nav class="fixed top-0 left-0 right-0 z-50 border-b border-gray-800 bg-black/90 backdrop-blur-sm">
+  <div class="container mx-auto px-6 py-4">
+    <div class="flex items-center justify-between">
+      <div class="text-2xl font-thin tracking-widest text-white opacity-90">
+        {{ brandName }}
+      </div>
+      <div class="flex items-center space-x-8">
+        @for (item of menuItems; track item.route) {
+          @if ((item.route !== '/login' && item.route !== '/registro') || !isLoggedIn()) {
+            <a [routerLink]="item.route" class="text-gray-300 hover:text-white transition-colors duration-300 text-sm tracking-wide cursor-pointer">{{ item.label }}</a>
+          }
+        }
+        @if (isLoggedIn()) {
+          <div class="flex items-center gap-3">
+            <div class="w-7 h-7 border border-gray-600 flex items-center justify-center text-xs text-gray-300 font-light tracking-wider">
+              {{ currentUser()?.nombre?.[0] }}{{ currentUser()?.apellido?.[0] }}
+            </div>
+            <span class="text-gray-300 text-xs tracking-widest">{{ currentUser()?.nombre | uppercase }} {{ currentUser()?.apellido | uppercase }}</span>
+            <button (click)="logout()" class="text-gray-500 hover:text-gray-200 transition-colors duration-300 text-xs tracking-widest border-l border-gray-700 pl-3">SALIR</button>
+          </div>
+        }
+      </div>
+    </div>
+  </div>
+</nav>

@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+import { guestGuard } from './features/auth/domain/guest.guard';
 
 export const routes: Routes = [
     { 
@@ -29,13 +30,15 @@ export const routes: Routes = [
         path: 'login', 
         loadComponent: () => 
             import('./features/auth/presentation/login-page/login-page').then(m => m.LoginPage),
-        title: 'Login'
+        title: 'Login',
+        canActivate: [guestGuard]
     },
     { 
         path: 'registro', 
         loadComponent: () => 
             import('./features/auth/presentation/register-page/register-page').then(m => m.RegisterPage),
-        title: 'Registro'
+        title: 'Registro',
+        canActivate: [guestGuard]
     },
     { path: '**', redirectTo: '' },
 ];
