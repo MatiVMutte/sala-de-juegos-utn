@@ -86,6 +86,7 @@ export class HigherLowerPage implements OnInit {
       user_id: user.id,
       correct_answers: this.correctAnswers(),
       total_rounds: this.totalRounds(),
+      played_at: new Date().toISOString(),
     });
   }
 

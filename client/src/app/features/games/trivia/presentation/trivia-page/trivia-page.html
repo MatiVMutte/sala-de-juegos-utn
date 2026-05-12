@@ -1,0 +1,91 @@
+<app-page-wrapper>
+  <section class="min-h-screen pt-24 pb-16 px-6 flex flex-col items-center">
+
+    <div class="w-full max-w-xl">
+      <!-- Header -->
+      <div class="text-center mb-10">
+        <a routerLink="/juegos" class="inline-flex items-center gap-2 text-xs text-gray-600 tracking-widest hover:text-gray-400 transition-colors duration-300 mb-6">
+          <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+          VOLVER A JUEGOS
+        </a>
+        <h1 class="text-5xl font-thin tracking-widest text-gray-200 mb-2">PREGUNTADOS</h1>
+        <p class="text-gray-500 text-sm tracking-wide">Trivia de conocimiento general</p>
+      </div>
+
+      <!-- Loading -->
+      @if (state() === 'LOADING') {
+        <div class="border border-gray-800 p-12 text-center">
+          <p class="text-gray-500 text-sm tracking-widest">CARGANDO PREGUNTAS...</p>
+        </div>
+      }
+
+      <!-- Playing -->
+      @if (state() === 'PLAYING' || state() === 'ANSWERED') {
+        <div class="border border-gray-800 p-8">
+          <!-- Progress -->
+          <div class="flex justify-between items-center mb-6">
+            <span class="text-xs text-gray-600 tracking-widest">PREGUNTA {{ progress }}</span>
+            <span class="text-xs text-gray-600">{{ correctAnswers() }} aciertos</span>
+          </div>
+
+          <!-- Question -->
+          @if (currentQuestion) {
+            <div class="mb-8">
+              <p class="text-xl font-light text-gray-200 leading-relaxed mb-4">{{ currentQuestion.question }}</p>
+              <span class="text-xs text-gray-700 uppercase tracking-widest">{{ currentQuestion.category }}</span>
+            </div>
+
+            <!-- Answers -->
+            <div class="space-y-3">
+              @for (answer of currentQuestion.all_answers; track answer) {
+                <button
+                  (click)="selectAnswer(answer)"
+                  [disabled]="state() === 'ANSWERED'"
+                  class="w-full border py-4 px-6 text-left text-gray-300 tracking-wide text-sm transition-all duration-300"
+                  [class.border-gray-700]="selectedAnswer() !== answer"
+                  [class.border-green-700]="state() === 'ANSWERED' && answer === currentQuestion.correct_answer"
+                  [class.text-green-400]="state() === 'ANSWERED' && answer === currentQuestion.correct_answer"
+                  [class.border-red-900]="state() === 'ANSWERED' && selectedAnswer() === answer && answer !== currentQuestion.correct_answer"
+                  [class.text-red-400]="state() === 'ANSWERED' && selectedAnswer() === answer && answer !== currentQuestion.correct_answer"
+                  [class.hover:border-gray-500]="state() === 'PLAYING'"
+                  [class.hover:text-white]="state() === 'PLAYING'"
+                  [class.opacity-60]="state() === 'ANSWERED' && selectedAnswer() !== answer && answer !== currentQuestion.correct_answer"
+                >
+                  {{ answer }}
+                </button>
+              }
+            </div>
+
+            <!-- Feedback -->
+            @if (state() === 'ANSWERED') {
+              <div class="mt-6 text-center">
+                @if (isCorrect()) {
+                  <p class="text-green-400 text-sm tracking-widest">¡CORRECTO!</p>
+                } @else {
+                  <p class="text-red-400 text-sm tracking-widest">INCORRECTO</p>
+                }
+              </div>
+            }
+          }
+        </div>
+      }
+
+      <!-- Game Over -->
+      @if (state() === 'GAME_OVER') {
+        <div class="border border-gray-700 p-10 text-center">
+          <p class="text-3xl font-thin tracking-widest text-gray-200 mb-4">FIN DE PARTIDA</p>
+          <p class="text-5xl font-thin text-gray-100 mb-2">{{ correctAnswers() }} / {{ questions().length }}</p>
+          <p class="text-gray-500 text-sm mb-6">respuestas correctas</p>
+          <p class="text-gray-600 text-xs tracking-widest mb-8">RESULTADO GUARDADO</p>
+          <button
+            (click)="loadQuestions()"
+            class="border border-gray-700 px-10 py-3 text-gray-300 tracking-widest text-sm hover:border-gray-400 hover:text-white transition-colors duration-300"
+          >
+            JUGAR DE NUEVO
+          </button>
+        </div>
+      }
+
+    </div>
+  </section>
+</app-page-wrapper>

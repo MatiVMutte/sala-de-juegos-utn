@@ -1,0 +1,183 @@
+<app-page-wrapper>
+  <section class="min-h-screen pt-24 pb-16 px-6">
+
+    <div class="max-w-6xl mx-auto">
+      <!-- Header -->
+      <div class="text-center mb-12">
+        <h1 class="text-5xl font-thin tracking-widest text-gray-200 mb-2">RESULTADOS</h1>
+        <p class="text-gray-500 text-sm tracking-wide">Tablas de clasificación de todos los juegos</p>
+      </div>
+
+      @if (loading()) {
+        <div class="text-center py-20">
+          <p class="text-gray-600 text-sm tracking-widest">CARGANDO RESULTADOS...</p>
+        </div>
+      } @else {
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+
+          <!-- Ahorcado -->
+          <div class="border border-gray-800">
+            <div class="p-4 border-b border-gray-800 bg-gray-950">
+              <h2 class="text-lg font-thin tracking-widest text-gray-200">AHORCADO</h2>
+              <p class="text-xs text-gray-600">Orden: Ganadores primero, menos letras usadas</p>
+            </div>
+            <div class="overflow-x-auto">
+              <table class="w-full text-sm">
+                <thead>
+                  <tr class="border-b border-gray-800 text-xs text-gray-500">
+                    <th class="p-3 text-left font-normal tracking-widest">JUGADOR</th>
+                    <th class="p-3 text-center font-normal tracking-widest">PALABRA</th>
+                    <th class="p-3 text-center font-normal tracking-widest">LETRAS</th>
+                    <th class="p-3 text-center font-normal tracking-widest">TIEMPO</th>
+                    <th class="p-3 text-center font-normal tracking-widest">RESULTADO</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  @for (r of hangmanResults(); track $index) {
+                    <tr class="border-b border-gray-900 text-gray-300">
+                      <td class="p-3">
+                        @if (r.user_id === currentUserId()) {
+                          <span class="text-green-400 font-medium">YO</span>
+                        } @else {
+                          {{ r.user_name }}
+                        }
+                      </td>
+                      <td class="p-3 text-center text-gray-500">{{ r.word }}</td>
+                      <td class="p-3 text-center">{{ r.letters_used }}</td>
+                      <td class="p-3 text-center">{{ r.duration_seconds }}s</td>
+                      <td class="p-3 text-center">
+                        @if (r.won) {
+                          <span class="text-green-400 text-xs">GANÓ</span>
+                        } @else {
+                          <span class="text-red-400 text-xs">PERDIÓ</span>
+                        }
+                      </td>
+                    </tr>
+                  } @empty {
+                    <tr><td colspan="5" class="p-6 text-center text-gray-600 text-xs">Sin resultados aún</td></tr>
+                  }
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Mayor o Menor -->
+          <div class="border border-gray-800">
+            <div class="p-4 border-b border-gray-800 bg-gray-950">
+              <h2 class="text-lg font-thin tracking-widest text-gray-200">MAYOR O MENOR</h2>
+              <p class="text-xs text-gray-600">Orden: Más aciertos, menos rondas totales</p>
+            </div>
+            <div class="overflow-x-auto">
+              <table class="w-full text-sm">
+                <thead>
+                  <tr class="border-b border-gray-800 text-xs text-gray-500">
+                    <th class="p-3 text-left font-normal tracking-widest">JUGADOR</th>
+                    <th class="p-3 text-center font-normal tracking-widest">ACIERTOS</th>
+                    <th class="p-3 text-center font-normal tracking-widest">TOTAL</th>
+                    <th class="p-3 text-center font-normal tracking-widest">FECHA</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  @for (r of higherLowerResults(); track $index) {
+                    <tr class="border-b border-gray-900 text-gray-300">
+                      <td class="p-3">
+                        @if (r.user_id === currentUserId()) {
+                          <span class="text-green-400 font-medium">YO</span>
+                        } @else {
+                          {{ r.user_name }}
+                        }
+                      </td>
+                      <td class="p-3 text-center font-light">{{ r.correct_answers }}</td>
+                      <td class="p-3 text-center text-gray-500">{{ r.total_rounds }}</td>
+                      <td class="p-3 text-center text-xs text-gray-600">{{ r.played_at | date:'shortDate' }}</td>
+                    </tr>
+                  } @empty {
+                    <tr><td colspan="4" class="p-6 text-center text-gray-600 text-xs">Sin resultados aún</td></tr>
+                  }
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Preguntados -->
+          <div class="border border-gray-800">
+            <div class="p-4 border-b border-gray-800 bg-gray-950">
+              <h2 class="text-lg font-thin tracking-widest text-gray-200">PREGUNTADOS</h2>
+              <p class="text-xs text-gray-600">Orden: Más respuestas correctas</p>
+            </div>
+            <div class="overflow-x-auto">
+              <table class="w-full text-sm">
+                <thead>
+                  <tr class="border-b border-gray-800 text-xs text-gray-500">
+                    <th class="p-3 text-left font-normal tracking-widest">JUGADOR</th>
+                    <th class="p-3 text-center font-normal tracking-widest">CORRECTAS</th>
+                    <th class="p-3 text-center font-normal tracking-widest">TOTAL</th>
+                    <th class="p-3 text-center font-normal tracking-widest">FECHA</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  @for (r of triviaResults(); track $index) {
+                    <tr class="border-b border-gray-900 text-gray-300">
+                      <td class="p-3">
+                        @if (r.user_id === currentUserId()) {
+                          <span class="text-green-400 font-medium">YO</span>
+                        } @else {
+                          {{ r.user_name }}
+                        }
+                      </td>
+                      <td class="p-3 text-center font-light">{{ r.correct_answers }}</td>
+                      <td class="p-3 text-center text-gray-500">{{ r.total_questions }}</td>
+                      <td class="p-3 text-center text-xs text-gray-600">{{ r.played_at | date:'shortDate' }}</td>
+                    </tr>
+                  } @empty {
+                    <tr><td colspan="4" class="p-6 text-center text-gray-600 text-xs">Sin resultados aún</td></tr>
+                  }
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Hidden Goal -->
+          <div class="border border-gray-800">
+            <div class="p-4 border-b border-gray-800 bg-gray-950">
+              <h2 class="text-lg font-thin tracking-widest text-gray-200">HIDDEN GOAL</h2>
+              <p class="text-xs text-gray-600">Orden: Menor tiempo, menos intentos</p>
+            </div>
+            <div class="overflow-x-auto">
+              <table class="w-full text-sm">
+                <thead>
+                  <tr class="border-b border-gray-800 text-xs text-gray-500">
+                    <th class="p-3 text-left font-normal tracking-widest">JUGADOR</th>
+                    <th class="p-3 text-center font-normal tracking-widest">TIEMPO</th>
+                    <th class="p-3 text-center font-normal tracking-widest">INTENTOS</th>
+                    <th class="p-3 text-center font-normal tracking-widest">FECHA</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  @for (r of hiddenGoalResults(); track $index) {
+                    <tr class="border-b border-gray-900 text-gray-300">
+                      <td class="p-3">
+                        @if (r.user_id === currentUserId()) {
+                          <span class="text-green-400 font-medium">YO</span>
+                        } @else {
+                          {{ r.user_name }}
+                        }
+                      </td>
+                      <td class="p-3 text-center">{{ r.completion_time_seconds }}s</td>
+                      <td class="p-3 text-center text-gray-500">{{ r.attempts }}</td>
+                      <td class="p-3 text-center text-xs text-gray-600">{{ r.played_at | date:'shortDate' }}</td>
+                    </tr>
+                  } @empty {
+                    <tr><td colspan="4" class="p-6 text-center text-gray-600 text-xs">Sin resultados aún</td></tr>
+                  }
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+        </div>
+      }
+
+    </div>
+  </section>
+</app-page-wrapper>

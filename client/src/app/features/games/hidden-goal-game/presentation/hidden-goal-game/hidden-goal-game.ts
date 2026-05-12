@@ -1,5 +1,7 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject } from '@angular/core';
 import { PageWrapper } from '../../../../../shared/ui/page-wrapper/page-wrapper';
+import { AuthService } from '../../../../auth/domain/auth.service';
+import { HiddenGoalService } from '../../infrastructure/hidden-goal.service';
 
 @Component({
   selector: 'app-hidden-goal-game',
@@ -7,6 +9,8 @@ import { PageWrapper } from '../../../../../shared/ui/page-wrapper/page-wrapper'
   templateUrl: './hidden-goal-game.html',
 })
 export class HiddenGoalGame implements OnInit, OnDestroy {
+  private authService = inject(AuthService);
+  private hiddenGoalService = inject(HiddenGoalService);
   // Texts
   public pageTitle: string = 'HIDDEN GOAL';
   public pageSubtitle: string = 'Encuentra la pelota y luego el arco. ¡Siente el boost!';
@@ -37,6 +41,8 @@ export class HiddenGoalGame implements OnInit, OnDestroy {
   elapsedTime: number = 0;
   timerInterval: any = null;
   finalTime: number = 0;
+  attempts: number = 0;
+  resultSaved: boolean = false;
   
   onMouseMove(event: MouseEvent) {
     const gameContainer = event.currentTarget as HTMLElement;
@@ -57,6 +63,8 @@ export class HiddenGoalGame implements OnInit, OnDestroy {
     const clickX = ((event.clientX - rect.left) / rect.width) * 100;
     const clickY = ((event.clientY - rect.top) / rect.height) * 100;
     
+    this.attempts++;
+    
     if (this.gameState === 'BUSCANDO_PELOTA') {
       const distanceToBall = Math.hypot(clickX - this.ballPosition.x, clickY - this.ballPosition.y);
       if (distanceToBall < 5) { // 5% de tolerancia
@@ -73,8 +81,24 @@ export class HiddenGoalGame implements OnInit, OnDestroy {
           clearInterval(this.timerInterval);
           this.timerInterval = null;
         }
+        this.saveResult();
       }
     }
+  }
+  
+  private async saveResult() {
+    if (this.resultSaved) return;
+    this.resultSaved = true;
+    
+    const user = this.authService.currentUser();
+    if (!user) return;
+    
+    await this.hiddenGoalService.saveResult({
+      user_id: user.id,
+      completion_time_seconds: Math.round(this.finalTime / 1000),
+      attempts: this.attempts,
+      won: true,
+    });
   }
   
   private updateBoost() {
@@ -138,6 +162,8 @@ export class HiddenGoalGame implements OnInit, OnDestroy {
     this.boostPercentage = 0;
     this.boostColor = 'bg-blue-500';
     this.finalTime = 0;
+    this.attempts = 0;
+    this.resultSaved = false;
     
     // Iniciar timer
     this.startTime = Date.now();

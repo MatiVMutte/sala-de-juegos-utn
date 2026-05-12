@@ -31,10 +31,17 @@ export const routes: Routes = [
         canActivate: [authGuard]
     },
     {
-        path: 'chat',
+        path: 'juegos/preguntados',
         loadComponent: () =>
-            import('./features/chat/presentation/chat-page/chat-page').then(m => m.ChatPage),
-        title: 'Chat',
+            import('./features/games/trivia/presentation/trivia-page/trivia-page').then(m => m.TriviaPage),
+        title: 'Preguntados',
+        canActivate: [authGuard]
+    },
+    {
+        path: 'resultados',
+        loadComponent: () =>
+            import('./features/results/presentation/results-page/results-page').then(m => m.ResultsPage),
+        title: 'Resultados',
         canActivate: [authGuard]
     },
     { 
@@ -69,6 +76,7 @@ export const routes: Routes = [
 export const menuItems = [
     { label: 'INICIO', route: '/' },
     { label: 'JUEGOS', route: '/juegos' },
+    { label: 'RESULTADOS', route: '/resultados' },
     { label: 'QUIÉN SOY', route: '/quien-soy' },
     { label: 'LOGIN', route: '/login' },
     { label: 'REGISTRO', route: '/registro' },

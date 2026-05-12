@@ -1,0 +1,125 @@
+{
+  "response_code": 0,
+  "results": [
+    {
+      "category": "Ciencia",
+      "type": "multiple",
+      "difficulty": "medium",
+      "question": "¿Cuál es el planeta más grande del sistema solar?",
+      "correct_answer": "Júpiter",
+      "incorrect_answers": ["Saturno", "Urano", "Neptuno"]
+    },
+    {
+      "category": "Historia",
+      "type": "multiple",
+      "difficulty": "easy",
+      "question": "¿En qué año llegó Cristóbal Colón a América?",
+      "correct_answer": "1492",
+      "incorrect_answers": ["1498", "1500", "1488"]
+    },
+    {
+      "category": "Geografía",
+      "type": "multiple",
+      "difficulty": "easy",
+      "question": "¿Cuál es la capital de Francia?",
+      "correct_answer": "París",
+      "incorrect_answers": ["Londres", "Berlín", "Madrid"]
+    },
+    {
+      "category": "Deportes",
+      "type": "multiple",
+      "difficulty": "medium",
+      "question": "¿Cuántos jugadores tiene un equipo de fútbol en el campo?",
+      "correct_answer": "11",
+      "incorrect_answers": ["10", "12", "9"]
+    },
+    {
+      "category": "Arte",
+      "type": "multiple",
+      "difficulty": "medium",
+      "question": "¿Quién pintó la Mona Lisa?",
+      "correct_answer": "Leonardo da Vinci",
+      "incorrect_answers": ["Miguel Ángel", "Pablo Picasso", "Vincent van Gogh"]
+    },
+    {
+      "category": "Ciencia",
+      "type": "multiple",
+      "difficulty": "easy",
+      "question": "¿Cuál es el símbolo químico del agua?",
+      "correct_answer": "H2O",
+      "incorrect_answers": ["CO2", "O2", "NaCl"]
+    },
+    {
+      "category": "Historia",
+      "type": "multiple",
+      "difficulty": "medium",
+      "question": "¿Quién fue el primer presidente de Argentina?",
+      "correct_answer": "Bernardino Rivadavia",
+      "incorrect_answers": ["Bartolomé Mitre", "Domingo Faustino Sarmiento", "Julio Argentino Roca"]
+    },
+    {
+      "category": "Geografía",
+      "type": "multiple",
+      "difficulty": "medium",
+      "question": "¿Cuál es el río más largo del mundo?",
+      "correct_answer": "Río Amazonas",
+      "incorrect_answers": ["Río Nilo", "Río Misisipi", "Río Yangtsé"]
+    },
+    {
+      "category": "Entretenimiento",
+      "type": "multiple",
+      "difficulty": "easy",
+      "question": "¿Quién es el autor de Harry Potter?",
+      "correct_answer": "J.K. Rowling",
+      "incorrect_answers": ["Stephen King", "Tolkien", "George R.R. Martin"]
+    },
+    {
+      "category": "Ciencia",
+      "type": "multiple",
+      "difficulty": "medium",
+      "question": "¿Cuántos huesos tiene el cuerpo humano adulto?",
+      "correct_answer": "206",
+      "incorrect_answers": ["208", "210", "180"]
+    },
+    {
+      "category": "Historia",
+      "type": "multiple",
+      "difficulty": "easy",
+      "question": "¿En qué continente se encuentra Egipto?",
+      "correct_answer": "África",
+      "incorrect_answers": ["Asia", "Europa", "América"]
+    },
+    {
+      "category": "Deportes",
+      "type": "multiple",
+      "difficulty": "easy",
+      "question": "¿Cada cuántos años se celebran los Juegos Olímpicos de Verano?",
+      "correct_answer": "4",
+      "incorrect_answers": ["2", "6", "8"]
+    },
+    {
+      "category": "Arte",
+      "type": "multiple",
+      "difficulty": "easy",
+      "question": "¿De qué país es originario el tango?",
+      "correct_answer": "Argentina",
+      "incorrect_answers": ["España", "Brasil", "Uruguay"]
+    },
+    {
+      "category": "Ciencia",
+      "type": "multiple",
+      "difficulty": "hard",
+      "question": "¿Cuál es la velocidad de la luz en el vacío?",
+      "correct_answer": "299,792 km/s",
+      "incorrect_answers": ["150,000 km/s", "400,000 km/s", "250,000 km/s"]
+    },
+    {
+      "category": "Geografía",
+      "type": "multiple",
+      "difficulty": "easy",
+      "question": "¿Cuántos continentes hay en la Tierra?",
+      "correct_answer": "7",
+      "incorrect_answers": ["5", "6", "8"]
+    }
+  ]
+}

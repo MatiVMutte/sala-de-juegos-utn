@@ -26,7 +26,8 @@ export const GAMES_DATA: GameCardData[] = [
   },
   {
     title: 'PREGUNTADOS',
-    description: 'Próximamente: preguntas y respuestas con una API externa de trivia.',
+    description: 'Trivia de conocimiento general con preguntas de una API externa.',
+    route: '/juegos/preguntados',
     icon: 'trivia'
   }
 ];

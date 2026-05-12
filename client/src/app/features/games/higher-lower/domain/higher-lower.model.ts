@@ -11,6 +11,7 @@ export interface HigherLowerResult {
   user_id: string;
   correct_answers: number;
   total_rounds: number;
+  played_at: string;
 }
 
 export function buildDeck(): Card[] {
