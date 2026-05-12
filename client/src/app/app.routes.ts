@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 import { guestGuard } from './features/auth/domain/guest.guard';
+import { authGuard } from './features/auth/domain/auth.guard';
 
 export const routes: Routes = [
     { 
@@ -12,7 +13,29 @@ export const routes: Routes = [
         path: 'juegos/hidden-goal-game', 
         loadComponent: () => 
             import('./features/games/hidden-goal-game/presentation/hidden-goal-game/hidden-goal-game').then(m => m.HiddenGoalGame),
-        title: 'Hidden Goal Game'
+        title: 'Hidden Goal Game',
+        canActivate: [authGuard]
+    },
+    {
+        path: 'juegos/ahorcado',
+        loadComponent: () =>
+            import('./features/games/hangman/presentation/hangman-page/hangman-page').then(m => m.HangmanPage),
+        title: 'Ahorcado',
+        canActivate: [authGuard]
+    },
+    {
+        path: 'juegos/mayor-menor',
+        loadComponent: () =>
+            import('./features/games/higher-lower/presentation/higher-lower-page/higher-lower-page').then(m => m.HigherLowerPage),
+        title: 'Mayor o Menor',
+        canActivate: [authGuard]
+    },
+    {
+        path: 'chat',
+        loadComponent: () =>
+            import('./features/chat/presentation/chat-page/chat-page').then(m => m.ChatPage),
+        title: 'Chat',
+        canActivate: [authGuard]
     },
     { 
         path: 'juegos', 

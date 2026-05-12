@@ -1,0 +1,92 @@
+<app-page-wrapper>
+  <section class="min-h-screen pt-24 pb-16 px-6 flex flex-col items-center">
+
+    <div class="w-full max-w-md">
+      <!-- Header -->
+      <div class="text-center mb-10">
+        <a routerLink="/juegos" class="inline-flex items-center gap-2 text-xs text-gray-600 tracking-widest hover:text-gray-400 transition-colors duration-300 mb-6">
+          <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+          VOLVER A JUEGOS
+        </a>
+        <h1 class="text-5xl font-thin tracking-widest text-gray-200 mb-2">MAYOR O MENOR</h1>
+        <p class="text-gray-500 text-sm tracking-wide">Adivina si la siguiente carta es mayor o menor</p>
+      </div>
+
+      <!-- Score -->
+      <div class="flex justify-center gap-12 mb-8 text-center">
+        <div>
+          <p class="text-3xl font-thin text-gray-100">{{ correctAnswers() }}</p>
+          <p class="text-xs text-gray-600 tracking-widest mt-1">ACIERTOS</p>
+        </div>
+        <div>
+          <p class="text-3xl font-thin text-gray-100">{{ deck().length }}</p>
+          <p class="text-xs text-gray-600 tracking-widest mt-1">CARTAS</p>
+        </div>
+      </div>
+
+      <!-- Card display -->
+      @if (currentCard()) {
+        <div class="border border-gray-700 p-10 text-center mb-2 relative"
+          [class.border-green-700]="lastResult() === 'CORRECT'"
+          [class.border-red-700]="lastResult() === 'WRONG'"
+        >
+          <p class="text-7xl font-thin text-gray-100 mb-3">{{ currentCard()!.value }}</p>
+          <p class="text-2xl">{{ suitSymbol(currentCard()!) }}</p>
+          <p class="text-xs text-gray-600 tracking-widest mt-2">{{ currentCard()!.suit }}</p>
+
+          @if (lastResult() === 'CORRECT') {
+            <div class="absolute inset-0 flex items-center justify-center bg-black/60">
+              <p class="text-green-400 text-2xl font-thin tracking-widest">¡CORRECTO!</p>
+            </div>
+          }
+          @if (lastResult() === 'WRONG') {
+            <div class="absolute inset-0 flex items-center justify-center bg-black/60">
+              <p class="text-red-400 text-2xl font-thin tracking-widest">INCORRECTO</p>
+              @if (nextCard()) {
+                <p class="text-gray-400 text-sm mt-2 absolute bottom-4">Era: {{ nextCard()!.value }} {{ suitSymbol(nextCard()!) }}</p>
+              }
+            </div>
+          }
+        </div>
+      }
+
+      <!-- Buttons -->
+      @if (state() === 'PLAYING') {
+        <div class="flex gap-4 mt-6">
+          <button
+            (click)="guess('LOWER')"
+            [disabled]="isAnimating()"
+            class="flex-1 border border-gray-700 py-4 text-gray-300 tracking-widest text-sm hover:border-blue-700 hover:text-blue-300 transition-colors duration-300 disabled:opacity-40 disabled:cursor-not-allowed inline-flex items-center justify-center gap-2"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+            MENOR
+          </button>
+          <button
+            (click)="guess('HIGHER')"
+            [disabled]="isAnimating()"
+            class="flex-1 border border-gray-700 py-4 text-gray-300 tracking-widest text-sm hover:border-orange-700 hover:text-orange-300 transition-colors duration-300 disabled:opacity-40 disabled:cursor-not-allowed inline-flex items-center justify-center gap-2"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg>
+            MAYOR
+          </button>
+        </div>
+      }
+
+      <!-- Game over -->
+      @if (state() === 'GAME_OVER') {
+        <div class="border border-gray-700 p-8 text-center mt-6">
+          <p class="text-3xl font-thin tracking-widest text-gray-200 mb-2">FIN DE PARTIDA</p>
+          <p class="text-gray-500 text-sm mb-1">Aciertos: <span class="text-gray-300">{{ correctAnswers() }}</span> de <span class="text-gray-300">{{ totalRounds() }}</span></p>
+          <p class="text-gray-600 text-xs tracking-widest mt-4 mb-6">RESULTADO GUARDADO</p>
+          <button
+            (click)="newGame()"
+            class="border border-gray-700 px-10 py-3 text-gray-300 tracking-widest text-sm hover:border-gray-400 hover:text-white transition-colors duration-300"
+          >
+            JUGAR DE NUEVO
+          </button>
+        </div>
+      }
+
+    </div>
+  </section>
+</app-page-wrapper>

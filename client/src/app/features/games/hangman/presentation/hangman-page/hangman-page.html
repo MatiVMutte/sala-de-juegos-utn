@@ -1,0 +1,114 @@
+<app-page-wrapper>
+  <section class="min-h-screen pt-24 pb-16 px-6 flex flex-col items-center">
+
+    <div class="w-full max-w-2xl">
+      <!-- Header -->
+      <div class="text-center mb-10">
+        <a routerLink="/juegos" class="inline-flex items-center gap-2 text-xs text-gray-600 tracking-widest hover:text-gray-400 transition-colors duration-300 mb-6">
+          <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+          VOLVER A JUEGOS
+        </a>
+        <h1 class="text-5xl font-thin tracking-widest text-gray-200 mb-2">AHORCADO</h1>
+        <p class="text-gray-500 text-sm tracking-wide">Adivina la palabra letra por letra</p>
+      </div>
+
+      <!-- Game area -->
+      <div class="border border-gray-800 p-8">
+
+        <!-- Hangman figure (text-based) -->
+        <div class="flex justify-center mb-8">
+          <pre class="text-gray-400 text-sm leading-tight font-mono select-none">
+  +---+
+  |   |
+  {{ hangmanParts() >= 1 ? 'O' : ' ' }}   |
+ {{ hangmanParts() >= 3 ? '/' : ' ' }}{{ hangmanParts() >= 2 ? '|' : ' ' }}{{ hangmanParts() >= 4 ? '\\' : ' ' }}  |
+ {{ hangmanParts() >= 5 ? '/' : ' ' }} {{ hangmanParts() >= 6 ? '\\' : ' ' }}  |
+      |
+ =========</pre>
+        </div>
+
+        <!-- Word display -->
+        <div class="flex justify-center gap-3 mb-8 flex-wrap">
+          @for (letter of displayWord; track $index) {
+            <div class="flex flex-col items-center">
+              <span class="text-2xl font-thin tracking-widest text-gray-100 min-w-[1.5rem] text-center">
+                {{ letter === '_' ? '\u00a0' : letter }}
+              </span>
+              <div class="w-6 h-px mt-1" [class.bg-gray-600]="letter === '_'" [class.bg-gray-300]="letter !== '_'"></div>
+            </div>
+          }
+        </div>
+
+        <!-- Wrong letters -->
+        @if (wrongLetters.length > 0) {
+          <div class="text-center mb-6">
+            <span class="text-xs text-gray-600 tracking-widest">LETRAS INCORRECTAS: </span>
+            <span class="text-red-400 text-sm tracking-widest">{{ wrongLetters.join('  ') }}</span>
+          </div>
+        }
+
+        <!-- Errors counter -->
+        <div class="text-center mb-8">
+          <span class="text-xs tracking-widest"
+            [class.text-gray-500]="errors < 4"
+            [class.text-orange-500]="errors >= 4 && errors < 6"
+            [class.text-red-500]="errors >= 6">
+            {{ errors }} / {{ maxErrors }} ERRORES
+          </span>
+        </div>
+
+        <!-- Result messages -->
+        @if (state === 'WON') {
+          <div class="text-center border border-gray-700 p-6 mb-8">
+            <p class="text-2xl font-thin tracking-widest text-gray-200 mb-1">¡GANASTE!</p>
+            <p class="text-gray-500 text-sm">La palabra era: <span class="text-gray-300">{{ word }}</span></p>
+          </div>
+        }
+        @if (state === 'LOST') {
+          <div class="text-center border border-red-900 p-6 mb-8">
+            <p class="text-2xl font-thin tracking-widest text-red-400 mb-1">PERDISTE</p>
+            <p class="text-gray-500 text-sm">La palabra era: <span class="text-gray-300">{{ word }}</span></p>
+          </div>
+        }
+
+        <!-- Alphabet buttons -->
+        @if (state === 'PLAYING') {
+          <div class="flex flex-wrap justify-center gap-2">
+            @for (letter of alphabet; track letter) {
+              <button
+                (click)="guess(letter)"
+                [disabled]="isGuessed(letter)"
+                class="w-10 h-10 text-sm font-light tracking-wider transition-all duration-200 border"
+                [class.border-gray-700]="!isGuessed(letter)"
+                [class.text-gray-300]="!isGuessed(letter)"
+                [class.hover:border-gray-400]="!isGuessed(letter)"
+                [class.hover:text-white]="!isGuessed(letter)"
+                [class.border-green-900]="isCorrect(letter)"
+                [class.text-green-500]="isCorrect(letter)"
+                [class.border-red-900]="isWrong(letter)"
+                [class.text-red-700]="isWrong(letter)"
+                [class.opacity-40]="isGuessed(letter)"
+                [class.cursor-not-allowed]="isGuessed(letter)"
+              >
+                {{ letter }}
+              </button>
+            }
+          </div>
+        }
+
+        <!-- Play again -->
+        @if (state !== 'PLAYING') {
+          <div class="text-center mt-6">
+            <button
+              (click)="newGame()"
+              class="border border-gray-700 px-10 py-3 text-gray-300 tracking-widest text-sm hover:border-gray-400 hover:text-white transition-colors duration-300"
+            >
+              JUGAR DE NUEVO
+            </button>
+          </div>
+        }
+
+      </div>
+    </div>
+  </section>
+</app-page-wrapper>

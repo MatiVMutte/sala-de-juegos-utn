@@ -19,10 +19,12 @@ export class AuthService {
   public currentUser = this._currentUser.asReadonly();
   public isLoggedIn = computed(() => this._currentUser() !== null);
 
+  public sessionReady: Promise<void>;
+
   constructor() {
-    this.supabase.auth.getSession().then(({ data }) => {
+    this.sessionReady = this.supabase.auth.getSession().then(async ({ data }) => {
       if (data.session) {
-        this.loadProfile(data.session.user.id);
+        await this.loadProfile(data.session.user.id);
       }
     });
 
